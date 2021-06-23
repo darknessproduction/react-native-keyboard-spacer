@@ -5,10 +5,13 @@ Works with emoji (when keyboard expands)
 ## Quick Start
 
 You can install this fork like this:
+
 Add this to your package.json
 `
 "react-native-keyboard-spacer": "git://github.com/darknessproduction/react-native-keyboard-spacer.git",
 `
+and run installation
+
 `yarn install/npm install`
 
 Old installation: `npm install --save react-native-keyboard-spacer`
