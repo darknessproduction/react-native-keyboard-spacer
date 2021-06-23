@@ -1,11 +1,17 @@
 # react-native-keyboard-spacer
 
-Plug and play iOS react-native keyboard spacer view.
+Works with emoji (when keyboard expands)
 
-![image](https://media.giphy.com/media/3oEjHJwLyYg7upTyYo/giphy.gif)
 ## Quick Start
 
-Install View: `npm install --save react-native-keyboard-spacer`
+You can install this fork like this:
+Add this to your package.json
+`
+"react-native-keyboard-spacer": "git://github.com/darknessproduction/react-native-keyboard-spacer.git",
+`
+`yarn install/npm install`
+
+Old installation: `npm install --save react-native-keyboard-spacer`
 
 ## Example Usage
 
