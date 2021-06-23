@@ -1,5 +1,3 @@
-[![NPM](https://nodei.co/npm-dl/react-native-keyboard-spacer.png?months=3&height=2)](https://nodei.co/npm/react-native-keyboard-spacer/)
-
 # react-native-keyboard-spacer
 
 Plug and play iOS react-native keyboard spacer view.
