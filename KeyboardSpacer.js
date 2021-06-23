@@ -1,6 +1,3 @@
-/**
- * Created by andrewhurst on 10/5/15.
- */
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import {
@@ -12,6 +9,8 @@ import {
   Platform,
   StyleSheet
 } from 'react-native';
+
+const screenHeightStatic = Dimensions.get('window').height;
 
 const styles = StyleSheet.create({
   container: {
@@ -55,16 +54,26 @@ export default class KeyboardSpacer extends Component {
     };
     this._listeners = null;
     this.updateKeyboardSpace = this.updateKeyboardSpace.bind(this);
+    this.updateKeyboardSpaceHideIOS = this.updateKeyboardSpaceHideIOS.bind(this);
     this.resetKeyboardSpace = this.resetKeyboardSpace.bind(this);
   }
 
   componentDidMount() {
     const updateListener = Platform.OS === 'android' ? 'keyboardDidShow' : 'keyboardWillShow';
     const resetListener = Platform.OS === 'android' ? 'keyboardDidHide' : 'keyboardWillHide';
-    this._listeners = [
-      Keyboard.addListener(updateListener, this.updateKeyboardSpace),
-      Keyboard.addListener(resetListener, this.resetKeyboardSpace)
-    ];
+    if(Platform.OS == 'ios'){
+      console.log('yes ios')
+      this._listeners = [
+        Keyboard.addListener(updateListener, this.updateKeyboardSpace),
+        Keyboard.addListener('keyboardDidShow', this.updateKeyboardSpaceHideIOS),
+        Keyboard.addListener(resetListener, this.resetKeyboardSpace)
+      ];
+    } else {
+      this._listeners = [
+        Keyboard.addListener(updateListener, this.updateKeyboardSpace),
+        Keyboard.addListener(resetListener, this.resetKeyboardSpace)
+      ];
+    }
   }
 
   componentWillUnmount() {
@@ -91,7 +100,33 @@ export default class KeyboardSpacer extends Component {
     // when external physical keyboard is connected
     // event.endCoordinates.height still equals virtual keyboard height
     // however only the keyboard toolbar is showing if there should be one
+
     const keyboardSpace = (screenHeight - event.endCoordinates.screenY) + this.props.topSpacing;
+    this.setState({
+      keyboardSpace,
+      isKeyboardOpened: true
+    }, this.props.onToggle(true, keyboardSpace));
+  }
+
+  updateKeyboardSpaceHideIOS(event) {
+    if (!event.endCoordinates) {
+      return;
+    }
+    const keyboardSpace = (screenHeightStatic - event.endCoordinates.screenY) + this.props.topSpacing;
+    if(keyboardSpace == this.state.keyboardSpace){
+      return;
+    }
+
+    let animationConfig = defaultAnimation;
+
+    animationConfig = LayoutAnimation.create(
+      event.duration,
+      LayoutAnimation.Types[event.easing],
+      LayoutAnimation.Properties.opacity,
+    );
+    
+    LayoutAnimation.configureNext(animationConfig);
+
     this.setState({
       keyboardSpace,
       isKeyboardOpened: true
